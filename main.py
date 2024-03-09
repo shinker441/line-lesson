@@ -50,27 +50,27 @@ async def callback(request: Request, background_tasks: BackgroundTasks):
 @handler.add(MessageEvent)
 def handle_message(data_json):
     # Extract the text from the incoming message
-    incoming_text = data_json["events"][0]["message"]["text"]
     reply_token = data_json["events"][0]["replyToken"]
 
     if isinstance(data_json["events"], TextMessage):
         reply_message = {
-            "type": "bubble",
-            "body": {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "Hello,"
-                        },
-                        {
-                            "type": "text",
-                            "text": "World!"
-                        }
-                    ]
+            "type": "template",
+            "altText": "this is a confirm template",
+            "template": {
+                "type": "confirm",
+                "text": "Are you sure?",
+                "actions": [
+                    {
+                        "type": "message",
+                        "label": "Yes",
+                        "text": "yes"
+                    },
+                    {
+                        "type": "message",
+                        "label": "No",
+                        "text": "no"
+                    }
+                ]
             }
         }
     line_bot_api.reply_message(reply_token, reply_message)
-
-
